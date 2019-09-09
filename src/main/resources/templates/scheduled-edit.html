@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout">
+<body>
+<div layout:fragment="main_content" class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title" th:text="${form.id == null}? '添加任务': '修改任务'">任务</h4>
+                    </div>
+                    <div class="content">
+                        <form role="form" method="post" th:object="${form}" th:action="@{${form.id==null}?'/scheduled/create':'/scheduled/update/'+${form.id} }">
+                            <input type="hidden" th:field="*{id}"/>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <label>执行名称</label>
+                                        <input class="form-control" placeholder="名称" th:field="*{name}" th:errorclass="error-control"/>
+                                        <span class="error-text" th:errors="*{name}">[name]</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>表达式<span style="color: red">（根据执行类型）</span></label>
+                                        <input type="text" class="form-control" placeholder="表达式" th:field="*{execute}" th:errorclass="error-control">
+                                        <span class="error-text" th:errors="*{execute}">[execute]</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>自定义参数<span style="color: red">（执行时会传递到JobHandler中）</span></label>
+                                        <input type="text" class="form-control" placeholder="自定义参数" th:field="*{param}" th:errorclass="error-control">
+                                        <span class="error-text" th:errors="*{param}">[param]</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>执行JobHandler <span style="color: red">（@JobHandler("demoJobHandler")相关填写"<span style="color: #4cae4c">demoJobHandler</span>"）</span></label>
+                                        <input type="text" class="form-control" placeholder="执行JobHandler" th:field="*{handler}" th:errorclass="error-control">
+                                        <span class="error-text" th:errors="*{handler}">[handler]</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>执行类型</label>
+                                        <select class="form-control" th:field="*{executeType}"  th:errorclass="error-control">
+                                            <option th:each="executeType : ${T(com.timing.po.enums.ExecuteType).values()}" th:value="${executeType}" th:text="${executeType.name+'（'+executeType.explain+'）'}"></option>
+                                        </select>
+                                        <span class="error-text" th:errors="*{executeType}">[executeType]</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><span class="bg-danger"><input type="checkbox" th:field="*{state}" />&nbsp;状态</span></label>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>备注</label>
+                                        <textarea class="form-control" rows="3" placeholder="请输入详细说明" th:field="*{remarks}" th:errorclass="error-control">
+                                        </textarea>
+                                        <span class="error-text" th:errors="*{remarks}">[remarks]</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <button type="submit" class="btn btn-info btn-fill pull-right">提交</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
